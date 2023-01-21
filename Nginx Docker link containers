@@ -1,0 +1,22 @@
+server {
+      listen 80 default_server;
+      listen [::]:80 default_server;
+      root /usr/share/nginx/html;
+      index index.php index.html index.htm index.nginx-debian.html;
+
+      server_name _;
+
+      location / {
+        try_files $uri $uri/ =404;
+      }
+
+      location ~ \.php$ {
+        fastcgi_pass php-fpm:9000; # Nome do container PHP-FPM e onde ele ta hospedado
+        fastcgi_index index.php;
+        include fastcgi_params; # Adaptado para Docker
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+      }
+
+      location ~ /\.ht {
+        deny all;
+      }
